@@ -2,26 +2,26 @@ version: "3.9"
 
 services:
   sql2025:
-    # Build‑Kontext ist das gesamte Repository (.) und nutzt den Dockerfile oben
+    # ------------------ Build‑Kontext ------------------
     build:
       context: .
       dockerfile: Dockerfile
-    # Das gebaute Image wird intern als "sql2025-dev:latest" getaggt
+    # ------------------ Image‑Name (nach Build) ------------------
     image: sql2025-dev:latest
     container_name: sql2025-dev
+    # ------------------ Laufzeit‑Parameter ------------------
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
-      # ----- Passwort NICHT im Repository hinterlegen! -----
-      # Stattdessen später als *Stack Variable* setzen (siehe Schritt 4.2)
-      MSSQL_SA_PASSWORD: ""               # leer lassen, Portainer überschreibt
+      # **Kein Passwort hier!** Wir setzen es später als Stack‑Variable.
+      MSSQL_SA_PASSWORD: ""         # leer lassen, wird überschrieben
     ports:
       - "1433:1433"
-    # Ein benanntes Volume wird später in Portainer angelegt → `sql2025-data`
+    # ------------------ Persistenter Speicher ------------------
     volumes:
       - sql2025-data:/var/opt/mssql
     restart: unless-stopped
 
 volumes:
   sql2025-data:
-    external: true   # Wir legen das Volume **vorher** in Portainer an
+    external: true       # Wir legen das Volume manuell an (Siehe Schritt 2)
